@@ -1,0 +1,165 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'montseratt', sans-serif;
+  background-color: black;
+}
+
+main{
+  min-height: 100vh;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0 ,0.2), rgba(0, 0, 0, 0.75));
+  
+}
+
+.App {
+  background-image: url('./img/shaun-darwood-TC6u_HnDDqs-unsplash.jpg');
+  background-size: cover;
+  background-position: bottom;
+  transition: .7s ease-out;
+}
+
+.mil{
+  background-image: url('./img/chris-leipelt-4UgUpo3YdKk-unsplash.jpg');
+}
+
+.selectbox{
+  display: block;
+  width: 100%;
+  padding: 20px;
+  height: 10vh;
+  text-align: center;
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0px 0px 16px 16px;
+  box-shadow: 0px 5px rgba(0, 0, 0, 0.2);
+  font-size: 30px;
+  color: black;
+}
+
+
+
+.search-box .search-bar:focus{
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.link-box{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.link{
+  text-decoration: none;
+  transition: .4s;
+  width: 200px;
+}
+
+.link:hover{
+  transform: scale(1.2);
+}
+
+.location-box{
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+}
+
+.location-box .location{
+  color: white;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+  font-size: 50px;
+  margin-bottom: 1vh;
+}
+
+.location-box .date{
+  color: white;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+  font-size: 30px;
+  margin-bottom: 1vh;
+}
+
+.metar-box, .notam-box, .notam, .link{
+  background-color: rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  padding: 15px 25px;
+  color: white;
+  font-size: 20px;
+  font-weight: 900;
+  text-shadow: 3px 6px rgba(50, 50, 70, 0.5);
+  text-align: center;
+  box-shadow: 3px 6px rgba(0, 0, 0, 0.2);
+  margin: 30px;
+}
+
+.notam{
+  margin: 20px auto;
+  padding: 10px;
+}
+
+.noinputbox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+  font-size: 50px;
+  margin-top: 20vh;
+}
+
+.noinput, .noinputdate{
+  margin: 5vh;
+}
+
+@media screen and (max-width: 767px) {
+
+.selectbox{
+  height: 12vh;
+}
+
+.link{
+  padding: 10px 10px;
+  margin: 10px 10px;
+  height: 80px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link:hover{
+  transform: scale(1.1);
+}
+
+.metar-box{
+  margin: 10px;
+  font-size: 15px;
+}
+
+.notam-box, .notam{
+  margin: 0px; 
+  padding: 0;
+}
+
+.notam{
+  padding: 0;
+  margin: 15px auto;
+  width: 95%;
+  font-size: 15px;
+  overflow: hidden;
+}
+
+}
