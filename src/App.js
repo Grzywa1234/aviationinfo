@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 const imgwCiv = {
+  /*key: "c0d9809aad20beee9e67291d769f074a"*/
   base: "http://awiacja.imgw.pl/rss/metar30.php?airport="
 }
 
@@ -9,7 +10,7 @@ const imgwMil = {
   base : "http://awiacja.imgw.pl/rss/metarmil.php?airport="
 }
 
-const herokucors = {
+const rsstojson = {
   base : "https://cors-anywhere.herokuapp.com/"
 }
 
@@ -19,6 +20,8 @@ const rsstojson = {
   api : "5kfv0uqurdoybsvtjd3hykpcmtotivlkdumjgts2"
 }
 */
+
+
 
 const notam = {
   base: "https://v4p4sz5ijk.execute-api.us-east-1.amazonaws.com/anbdata/states/notams/notams-realtime-list?",
@@ -34,12 +37,52 @@ function App() {
   const milList = ['EPCE', 'EPDA', 'EPDE', 'EPIR', 'EPKS', 'EPLK', 'EPLY', 'EPMB', 'EPMI', 'EPMM', 'EPNA', 'EPOK', 'EPPR', 'EPPW', 'EPRA', 'EPSN', 'EPTM']
   const civList = ['EPBY', 'EPGD', 'EPKK', 'EPKT', 'EPLB', 'EPLL', 'EPMO', 'EPPO', 'EPRA', 'EPRZ', 'EPSC', 'EPSY', 'EPWA', 'EPWR', 'EPZG']
   
+  
+  /*
+  const search = evt => {
+    if (evt.key === "Enter") {
+      fetch(`${api.base}weather?q=${query}&units=metric&appid=${api.key}`)
+      .then(result => result.json())
+      .then(result => { 
+      setWeather(result);
+      setQuery('');
+      console.log(result);
+      })
+    }
+  }
+  */
 
+
+  /*
+  useEffect(() => {
+    async function fetchData () {
+      if (milList.includes(query)) { 
+      const metarData = await fetch(`${rsstojson.base}${imgwMil.base}${query}&api_key=${rsstojson.api}`)
+      let metar = await metarData.json();
+       } else {
+        const metar = await fetch(`${rsstojson.base}${imgwCiv.base}${query}&api_key=${rsstojson.api}`)
+      metar
+          .json()
+          .then(metar => setWeather(metar))
+          .catch(err => new Error('IMGW do not respond, please reload'))
+          
+       }
+    };
+
+    fetchData()
+    console.log(query)
+    console.log(weather)
+    
+  }, [query]);
+
+*/
+  
   useEffect(() => {
     setWeather(['Loading IMGW MEATR database..'])
     async function fetchData () {
-      if (milList.includes(query)) {
-      const metarData = await fetch(`${herokucors.base}${imgwMil.base}${query}`)
+      const list = ['EPCE', 'EPDA', 'EPDE', 'EPIR', 'EPKS', 'EPLK', 'EPLY', 'EPMB', 'EPMI', 'EPMM', 'EPNA', 'EPOK', 'EPPR', 'EPPW', 'EPRA', 'EPSN', 'EPTM'];
+      if (list.includes(query)) {
+      const metarData = await fetch(`${rsstojson.base}${imgwMil.base}${query}`)
       let response = await metarData.text();
       
       let parser = new DOMParser();
@@ -53,7 +96,7 @@ function App() {
       
        } else {
          
-      const metarData = await fetch(`${herokucors.base}${imgwCiv.base}${query}`)
+      const metarData = await fetch(`${rsstojson.base}${imgwCiv.base}${query}`)
       const response = await metarData.text();
 
       let parser = new DOMParser();
@@ -62,14 +105,18 @@ function App() {
 
         setWeather(metar);
         console.log(response)
+        /*
         console.log(weather)
+        */
          
        }
        
     }
 
     fetchData()
+    /*
     console.log(weather)
+    */
   }, [query]);
 
   
@@ -89,15 +136,137 @@ useEffect(() => {
     fetchNotams()
   }
     setNotam(notams);
+    /*
     console.log(response)
     console.log(response.length)
   console.log(notamResp)
+  */
   };
 
   
   fetchNotams()
 
 }, [query])
+  
+  
+
+/*
+  const searchCiv = () => {
+    fetch(`${rsstojson.base}${imgwCiv.base}${query}&api_key=${rsstojson.api}`)
+    .then(result => {
+      if (result.ok) {
+        return result.json();
+      } else {
+        throw new Error('IMGW do not respond, please reload')
+      }
+    })
+    .then(result => {
+      setWeather(result);
+      
+
+      console.log(result);
+    })
+    fetch(`${notam.base}api_key=${notam.api}&format=json&criticality=&locations=${query}`)
+    .then(result => {
+      if (result.ok) {
+        return result.json();
+      } else {
+        throw new Error('ICAO NOTAM do not respond, please reload')
+      }
+    })
+    .then(result => {
+      setNotam(result);
+
+      console.log(result);
+    })
+  }
+  
+  
+
+  const searchMil = () => {
+    fetch(`${rsstojson.base}${imgwMil.base}${query}&api_key=${rsstojson.api}`)
+    .then(result => {
+      if (result.ok) {
+        return result.json();
+      } else {
+        throw new Error('IMGW METAR do not respond, please reload')
+      }
+    })
+    .then(result => {
+      setWeather(result);
+      
+
+      console.log(result);
+    })
+    fetch(`${notam.base}api_key=${notam.api}&format=json&criticality=&locations=${query}`)
+    .then(resp => {
+      if (resp.ok) {
+        return resp.json();
+      } else {
+        throw new Error('ICAO NOTAM do not respond, please reload')
+      }
+    })
+    .then(resp => {
+        setNotam(resp)
+        let notams = []
+        for (let i = 0; i < notamResp.length; i++){
+          
+          notams.push(`Notam nr ${i} ${i[0]}`)
+        }
+      
+      setNotam(notams);
+
+      console.log(resp);
+      console.log(notamResp)
+    })  
+  }
+  */
+
+  /*
+  function CreateNotams () {
+    let notams = []
+    for (let i = 0; i < notamResp.length; i++){
+      
+      notams.push(`Notam nr ${i} ${i[0]}`)
+    }
+    return notams
+  }
+
+  /*
+  const searchNotam = () => {
+    fetch(`${notam.base}api_key=${notam.api}&format=json&criticality=&locations=${query}`)
+    .then(result => {
+      if (result.ok) {
+        return result.json();
+      } else {
+        throw new Error('ICAO NOTAM do not respond')
+      }
+    })
+    .then(result => {
+      setNotam(result);
+
+      console.log(result);
+    })
+    
+    .then(response => response.json())
+    .then(response => {
+      setNotam(response);
+
+      console.log(response)
+    })
+  }
+  */
+
+  
+  
+  /*
+  const search = () => {
+    fetch(`${api.base}${query}`)
+    .then(result => result.text())
+    .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+    .then(data => console.log(data))
+  }
+  */
 
   const dateBuilder = (d) => {
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -120,7 +289,8 @@ useEffect(() => {
 
         <form>
           <select disabled={false} className="selectbox" value={query} 
-          onChange={e => setQuery(e.target.value)}>
+          onChange={e => setQuery(e.target.value)}
+          /*onClick={milList.includes(query) ? searchMil : searchCiv}*/>
             <option>Click here</option>
             <optgroup label="Military">
               {milList.map(el=> {
