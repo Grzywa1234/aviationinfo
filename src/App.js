@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 
 const imgwCiv = {
-  /*key: "c0d9809aad20beee9e67291d769f074a"*/
   base: "http://awiacja.imgw.pl/rss/metar30.php?airport="
 }
 
@@ -10,10 +9,16 @@ const imgwMil = {
   base : "http://awiacja.imgw.pl/rss/metarmil.php?airport="
 }
 
+const herokucors = {
+  base : "https://cors-anywhere.herokuapp.com/"
+}
+
+/* used at first version but have to pay for additional feeds 
 const rsstojson = {
   base : "https://api.rss2json.com/v1/api.json?rss_url=",
   api : "5kfv0uqurdoybsvtjd3hykpcmtotivlkdumjgts2"
 }
+*/
 
 const notam = {
   base: "https://v4p4sz5ijk.execute-api.us-east-1.amazonaws.com/anbdata/states/notams/notams-realtime-list?",
@@ -26,7 +31,6 @@ function App() {
   const [weather, setWeather] = useState([]);
   const [notamResp, setNotam] = useState([]);
   
-
   const milList = ['EPCE', 'EPDA', 'EPDE', 'EPIR', 'EPKS', 'EPLK', 'EPLY', 'EPMB', 'EPMI', 'EPMM', 'EPNA', 'EPOK', 'EPPR', 'EPPW', 'EPRA', 'EPSN', 'EPTM']
   const civList = ['EPBY', 'EPGD', 'EPKK', 'EPKT', 'EPLB', 'EPLL', 'EPMO', 'EPPO', 'EPRA', 'EPRZ', 'EPSC', 'EPSY', 'EPWA', 'EPWR', 'EPZG']
   
@@ -34,30 +38,41 @@ function App() {
   useEffect(() => {
     setWeather(['Loading IMGW MEATR database..'])
     async function fetchData () {
-      if (milList.includes(query)) { 
-      const metarData = await fetch(`${rsstojson.base}${imgwMil.base}${query}&api_key=${rsstojson.api}`)
-      const response = await metarData.json();
-        setWeather(response.items[0].content);
-        console.log(response)
-        console.log(weather)
+      if (milList.includes(query)) {
+      const metarData = await fetch(`${herokucors.base}${imgwMil.base}${query}`)
+      let response = await metarData.text();
+      
+      let parser = new DOMParser();
+      let xml = parser.parseFromString(response, "application/xml");
+      let metar = xml.getElementsByTagName("description")[1].innerHTML;
+      
+        setWeather(metar);
+        console.log(xml)
+        console.log(metar)
       
       
        } else {
          
-      const metarData = await fetch(`${rsstojson.base}${imgwCiv.base}${query}&api_key=${rsstojson.api}`)
-      const response = await metarData.json();
-        setWeather(response.items[0].content);
+      const metarData = await fetch(`${herokucorse.base}${imgwCiv.base}${query}`)
+      const response = await metarData.text();
+
+      let parser = new DOMParser();
+      let xml = parser.parseFromString(response, "application/xml");
+      let metar = xml.getElementsByTagName("description")[1].innerHTML;
+
+        setWeather(metar);
         console.log(response)
         console.log(weather)
          
        }
+       
     }
+
     fetchData()
     console.log(weather)
   }, [query]);
 
   
-
 useEffect(() => {
   setNotam(['Loading ICAO NOTAM database...'])
   async function fetchNotams () {
@@ -78,10 +93,11 @@ useEffect(() => {
     console.log(response.length)
   console.log(notamResp)
   };
-  fetchNotams()
-}, [query])
-  
 
+  
+  fetchNotams()
+
+}, [query])
 
   const dateBuilder = (d) => {
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -94,8 +110,6 @@ useEffect(() => {
 
     return `${day}, ${date} ${month} ${year}`;
   }
-
-  
 
   return (
     <div className={
