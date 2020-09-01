@@ -53,7 +53,7 @@ function App() {
       
        } else {
          
-      const metarData = await fetch(`${herokucorse.base}${imgwCiv.base}${query}`)
+      const metarData = await fetch(`${herokucors.base}${imgwCiv.base}${query}`)
       const response = await metarData.text();
 
       let parser = new DOMParser();
