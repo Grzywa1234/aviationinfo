@@ -16,6 +16,6 @@ https://aviationinfo.netlify.app/
 1. Redirection to AUP site (Airspace Use Plan)
 2. Redirection to AIP MIL / AIP CIV (Aeronautical Information Publication)
 3. Based on input: 
-  ..* fetching METAR (Meteorological Aerodrome Report) 
-  ..* fetching NOTAM (Notice To Airman)
+  + fetching METAR (Meteorological Aerodrome Report) 
+  + fetching NOTAM (Notice To Airman)
   
