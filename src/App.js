@@ -84,7 +84,7 @@ useEffect(() => {
       notams.push(`Nr: ${response[i].key}, Start date: ${response[i].startdate}, End date: ${response[i].enddate}, Message: ${response[i].message}`)
     }
   } else {
-    notams.push('ICAO NOTAM API not respond. I`m trying to load data.. Please wait or refresh:)')
+    notams.push('ICAO NOTAM API not responding. I`m trying to load data.. Please wait or refresh :)')
     fetchNotams()
   }
     setNotam(notams);
